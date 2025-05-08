@@ -34,7 +34,7 @@ resource "local_file" "bucket_name" {
 
 # S3 bucket for Lambda deployment
 resource "aws_s3_bucket" "lambda_deployment" {
-  bucket = local.bucket_name
+  bucket = "lambda-bucket-2007"
 }
 
 resource "aws_s3_bucket_versioning" "lambda_deployment" {

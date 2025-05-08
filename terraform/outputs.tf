@@ -15,5 +15,5 @@ output "api_endpoint" {
 
 output "s3_bucket_name" {
   description = "Name of the S3 bucket for Lambda deployment"
-  value       = local.bucket_name
+  value       = "lambda-bucket-2007"
 }
