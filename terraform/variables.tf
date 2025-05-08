@@ -26,4 +26,9 @@ variable "lambda_memory_size" {
   description = "Memory size for the Lambda function in MB"
   type        = number
   default     = 256
+}
+
+variable "s3_bucket_name" {
+  description = "Name of the S3 bucket for Lambda deployment"
+  type        = string
 } 

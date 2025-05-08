@@ -14,9 +14,27 @@ provider "aws" {
 # Get current AWS account ID
 data "aws_caller_identity" "current" {}
 
+# Random string for unique resource names
+resource "random_string" "suffix" {
+  length  = 8
+  special = false
+  upper   = false
+}
+
+# Generate bucket name
+locals {
+  bucket_name = "chatbot-lambda-deployment-${random_string.suffix.result}"
+}
+
+# Output bucket name to a file
+resource "local_file" "bucket_name" {
+  content  = local.bucket_name
+  filename = "${path.module}/bucket_name.txt"
+}
+
 # S3 bucket for Lambda deployment
 resource "aws_s3_bucket" "lambda_deployment" {
-  bucket = "chatbot-lambda-deployment-rl1jdeb1"
+  bucket = local.bucket_name
 }
 
 resource "aws_s3_bucket_versioning" "lambda_deployment" {
@@ -24,13 +42,6 @@ resource "aws_s3_bucket_versioning" "lambda_deployment" {
   versioning_configuration {
     status = "Enabled"
   }
-}
-
-# Random string for unique resource names
-resource "random_string" "suffix" {
-  length  = 8
-  special = false
-  upper   = false
 }
 
 # Lambda function using existing LambdaExecutionRole
