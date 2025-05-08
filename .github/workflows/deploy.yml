@@ -8,6 +8,7 @@ on:
 
 env:
   AWS_REGION: us-east-1
+  S3_BUCKET: chatbot-lambda-deployment-rl1jdeb1
 
 jobs:
   deploy:
@@ -54,17 +55,9 @@ jobs:
           terraform plan
         if: github.event_name == 'pull_request'
 
-      - name: Create S3 Bucket
-        id: s3
-        run: |
-          cd terraform
-          terraform apply -auto-approve -target=aws_s3_bucket.lambda_deployment
-          BUCKET_NAME=$(terraform output -raw s3_bucket_name)
-          echo "bucket_name=$BUCKET_NAME" >> $GITHUB_OUTPUT
-
       - name: Upload to S3
         run: |
-          aws s3 cp lambda_function.zip s3://${{ steps.s3.outputs.bucket_name }}/lambda_function.zip
+          aws s3 cp lambda_function.zip s3://${{ env.S3_BUCKET }}/lambda_function.zip
 
       - name: Terraform Apply
         run: |
