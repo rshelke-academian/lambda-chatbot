@@ -54,9 +54,37 @@ The project uses GitHub Actions for CI/CD. The workflow will:
 3. Deploy using Terraform
 
 ### Required GitHub Secrets
-- `AWS_ACCESS_KEY_ID`
-- `AWS_SECRET_ACCESS_KEY`
-- `AWS_REGION`
+- `AWS_ROLE_ARN`: ARN of the IAM role for GitHub Actions OIDC authentication
+- `S3_BUCKET`: Name of the S3 bucket for Lambda deployments
+
+### Setting up OIDC Authentication
+1. Create an IAM role in AWS with the following trust policy:
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Federated": "arn:aws:iam::<YOUR-AWS-ACCOUNT-ID>:oidc-provider/token.actions.githubusercontent.com"
+            },
+            "Action": "sts:AssumeRoleWithWebIdentity",
+            "Condition": {
+                "StringEquals": {
+                    "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+                    "token.actions.githubusercontent.com:sub": "repo:<YOUR-GITHUB-ORG>/<YOUR-REPO>:ref:refs/heads/main"
+                }
+            }
+        }
+    ]
+}
+```
+
+2. Attach the necessary permissions to the role:
+   - S3 access for deployment
+   - Lambda management
+   - API Gateway management
+   - Bedrock access
 
 ## Infrastructure
 

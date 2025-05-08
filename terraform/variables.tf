@@ -1,29 +1,15 @@
-variable "aws_region" {
-  description = "AWS region to deploy resources"
+variable "lambda_function_name" {
+  description = "Name of the Lambda function"
   type        = string
-  default     = "us-east-1"
 }
 
-variable "project_name" {
-  description = "Name of the project"
+variable "s3_bucket" {
+  description = "Name of the S3 bucket for Lambda deployment package"
   type        = string
-  default     = "chatbot"
 }
 
-variable "lambda_runtime" {
-  description = "Runtime for the Lambda function"
+variable "deployment_package_key" {
+  description = "S3 key for the Lambda deployment package"
   type        = string
-  default     = "python3.12"
-}
-
-variable "lambda_timeout" {
-  description = "Timeout for the Lambda function in seconds"
-  type        = number
-  default     = 30
-}
-
-variable "lambda_memory_size" {
-  description = "Memory size for the Lambda function in MB"
-  type        = number
-  default     = 256
+  default     = "deployment.zip"
 } 
