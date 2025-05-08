@@ -8,11 +8,6 @@ variable "lambda_role_name" {
   type        = string
 }
 
-variable "lambda_policy_name" {
-  description = "Name of the IAM policy for Bedrock access"
-  type        = string
-}
-
 variable "s3_bucket" {
   description = "Name of the S3 bucket for Lambda deployment package"
   type        = string
