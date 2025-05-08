@@ -8,7 +8,6 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  S3_BUCKET: ${{ secrets.S3_BUCKET }}
 
 jobs:
   deploy:
@@ -39,10 +38,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Upload to S3
-        run: |
-          aws s3 cp lambda_function.zip s3://${{ env.S3_BUCKET }}/lambda_function.zip
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
@@ -58,6 +53,16 @@ jobs:
           cd terraform
           terraform plan
         if: github.event_name == 'pull_request'
+
+      - name: Get S3 Bucket Name
+        id: bucket
+        run: |
+          cd terraform
+          echo "bucket_name=$(terraform output -raw s3_bucket_name)" >> $GITHUB_OUTPUT
+
+      - name: Upload to S3
+        run: |
+          aws s3 cp lambda_function.zip s3://${{ steps.bucket.outputs.bucket_name }}/lambda_function.zip
 
       - name: Terraform Apply
         run: |
