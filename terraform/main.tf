@@ -44,7 +44,7 @@ resource "aws_iam_role" "lambda_role" {
 # Attach AWS managed Bedrock policy instead of custom policy
 resource "aws_iam_role_policy_attachment" "lambda_bedrock_policy_attachment" {
   role       = aws_iam_role.lambda_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonBedrockFullAccess"
+  policy_arn = aws_iam_policy.lambda_bedrock_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_basic_policy_attachment" {
@@ -69,7 +69,21 @@ resource "aws_lambda_function" "chatbot_lambda" {
     }
   }
 }
+resource "aws_iam_policy" "lambda_bedrock_policy" {
+  name        = "chatbot-lambda-bedrock-policy"
+  description = "Policy for Lambda to access Bedrock"
 
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = ["bedrock:*"],
+        Effect = "Allow",
+        Resource = "*"
+      }
+    ]
+  })
+}
 # API Gateway for Lambda
 resource "aws_apigatewayv2_api" "lambda_api" {
   name          = "${var.lambda_function_name}-api"
