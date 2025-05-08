@@ -54,15 +54,17 @@ jobs:
           terraform plan
         if: github.event_name == 'pull_request'
 
-      - name: Get S3 Bucket Name
-        id: bucket
+      - name: Create S3 Bucket
+        id: s3
         run: |
           cd terraform
-          echo "bucket_name=$(terraform output -raw s3_bucket_name)" >> $GITHUB_OUTPUT
+          terraform apply -auto-approve -target=aws_s3_bucket.lambda_deployment
+          BUCKET_NAME=$(terraform output -raw s3_bucket_name)
+          echo "bucket_name=$BUCKET_NAME" >> $GITHUB_OUTPUT
 
       - name: Upload to S3
         run: |
-          aws s3 cp lambda_function.zip s3://${{ steps.bucket.outputs.bucket_name }}/lambda_function.zip
+          aws s3 cp lambda_function.zip s3://${{ steps.s3.outputs.bucket_name }}/lambda_function.zip
 
       - name: Terraform Apply
         run: |
