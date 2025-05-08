@@ -16,7 +16,7 @@ data "aws_caller_identity" "current" {}
 
 # S3 bucket for Lambda deployment
 resource "aws_s3_bucket" "lambda_deployment" {
-  bucket = "${var.project_name}-lambda-deployment-${random_string.suffix.result}"
+  bucket = "chatbot-lambda-deployment-rl1jdeb1"
 }
 
 resource "aws_s3_bucket_versioning" "lambda_deployment" {
