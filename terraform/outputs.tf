@@ -15,5 +15,5 @@ output "api_endpoint" {
 
 output "s3_bucket_name" {
   description = "Name of the S3 bucket for Lambda deployment"
-  value       = "lambda-bucket-2007"
+  value       = "chatbot-lambda-deployment-rl1jdeb1"
 }
