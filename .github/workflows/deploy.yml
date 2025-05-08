@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  AWS_REGION: us-east-1
+  AWS_REGION: ap-south-1
   S3_BUCKET: chatbot-lambda-deployment-rl1jdeb1
 
 jobs:
