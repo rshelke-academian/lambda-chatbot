@@ -9,7 +9,7 @@ on:
 env:
   AWS_REGION: us-east-1
   S3_BUCKET: ${{ secrets.S3_BUCKET }}
-  LAMBDA_FUNCTION_NAME: chatbot-lambda
+  LAMBDA_FUNCTION_NAME: ${{ secrets.LAMBDA_FUNCTION_NAME }}
 
 jobs:
   deploy:
@@ -41,9 +41,17 @@ jobs:
         cd src
         zip -r ../deployment.zip .
 
+    - name: Validate S3 bucket name
+      run: |
+        if [ -z "${{ env.S3_BUCKET }}" ]; then
+          echo "Error: S3_BUCKET environment variable is empty"
+          exit 1
+        fi
+        echo "Using S3 bucket: ${{ env.S3_BUCKET }}"
+
     - name: Upload deployment.zip to S3
       run: |
-        aws s3 cp deployment.zip s3://${{ env.S3_BUCKET }}/deployment.zip
+        aws s3 cp deployment.zip "s3://${{ env.S3_BUCKET }}/deployment.zip"
 
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v2
@@ -56,14 +64,14 @@ jobs:
     - name: Terraform Plan
       run: |
         cd terraform
-        terraform plan -var="lambda_function_name=${{ env.LAMBDA_FUNCTION_NAME }}" \
-                       -var="s3_bucket=${{ env.S3_BUCKET }}" \
+        terraform plan -var="lambda_function_name=${{ secrets.LAMBDA_FUNCTION_NAME }}" \
+                       -var="s3_bucket=${{ secrets.S3_BUCKET }}" \
                        -var="deployment_package_key=deployment.zip"
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main'
       run: |
         cd terraform
-        terraform apply -auto-approve -var="lambda_function_name=${{ env.LAMBDA_FUNCTION_NAME }}" \
-                        -var="s3_bucket=${{ env.S3_BUCKET }}" \
+        terraform apply -auto-approve -var="lambda_function_name=${{ secrets.LAMBDA_FUNCTION_NAME }}" \
+                        -var="s3_bucket=${{ secrets.S3_BUCKET }}" \
                         -var="deployment_package_key=deployment.zip"
