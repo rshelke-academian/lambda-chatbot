@@ -25,7 +25,7 @@ resource "aws_s3_bucket_versioning" "lambda_bucket_versioning" {
 
 # IAM role for Lambda
 resource "aws_iam_role" "lambda_role" {
-  name = "${var.lambda_function_name}-role"
+  name = var.lambda_role_name
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -43,7 +43,7 @@ resource "aws_iam_role" "lambda_role" {
 
 # IAM policy for Lambda to access Bedrock
 resource "aws_iam_policy" "lambda_bedrock_policy" {
-  name        = "${var.lambda_function_name}-bedrock-policy"
+  name        = var.lambda_policy_name
   description = "Policy for Lambda to access Bedrock"
 
   policy = jsonencode({

@@ -1,5 +1,15 @@
 variable "lambda_function_name" {
-  description = "Name of the Lambda function"
+  description = "Lambda function name"
+  type        = string
+}
+
+variable "lambda_role_name" {
+  description = "Name of the IAM role for Lambda"
+  type        = string
+}
+
+variable "lambda_policy_name" {
+  description = "Name of the IAM policy for Bedrock access"
   type        = string
 }
 
@@ -9,8 +19,6 @@ variable "s3_bucket" {
 }
 
 variable "deployment_package_key" {
-  description = "S3 key for the Lambda deployment package"
+  description = "Path to the deployment package inside the S3 bucket"
   type        = string
-  default     = "deployment.zip"
-} 
-
+}
