@@ -54,13 +54,10 @@ jobs:
 
     - name: Terraform Plan
       working-directory: terraform
-      run: terraform plan -var="lambda_function_name=${{ secrets.LAMBDA_FUNCTION_NAME }}" -var="s3_bucket=${{ secrets.S3_BUCKET }}" -var="deployment_package_key=deployment.zip"
+      run: terraform plan -var="lambda_function_name=${{ secrets.LAMBDA_FUNCTION_NAME }}" -var="s3_bucket=${{ secrets.S3_BUCKET }}" -var="deployment_package_key=deployment.zip" -var="lambda_role_name=${{ secrets.LAMBDA_ROLE_NAME }}"
     
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main'
       working-directory: terraform
-      run: terraform apply -auto-approve \
-        -var="lambda_function_name=${{ secrets.LAMBDA_FUNCTION_NAME }}" \
-        -var="s3_bucket=${{ secrets.S3_BUCKET }}" \
-        -var="deployment_package_key=deployment.zip"
+      run: terraform apply -auto-approve -var="lambda_function_name=${{ secrets.LAMBDA_FUNCTION_NAME }}" -var="s3_bucket=${{ secrets.S3_BUCKET }}" -var="deployment_package_key=deployment.zip" -var="lambda_role_name=${{ secrets.LAMBDA_ROLE_NAME }}"
