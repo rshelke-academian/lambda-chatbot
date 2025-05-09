@@ -32,6 +32,8 @@ def lambda_handler(event, context):
             "top_p": 0.999,
             "messages": [
                 {
+                    
+                    
                     "role": "user",
                     "content": [
                         {
