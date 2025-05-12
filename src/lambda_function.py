@@ -20,6 +20,13 @@ def lambda_handler(event, context):
                 'body': json.dumps({'error': 'No message provided'})
             }
 
+        # Educational system prompt
+        system_prompt = (
+            "You are an educational chatbot designed to help users learn new concepts clearly and interactively. "
+            "Provide step-by-step explanations, simple examples, and ask follow-up questions to engage the learner. "
+            "Avoid jargon and make learning enjoyable."
+        )
+
         # Prepare the request for Claude 3
         model_id = 'us.anthropic.claude-3-7-sonnet-20250219-v1:0'
         
@@ -32,8 +39,10 @@ def lambda_handler(event, context):
             "top_p": 0.999,
             "messages": [
                 {
-                    
-                    
+                    "role": "system",
+                    "content": system_prompt
+                },
+                {
                     "role": "user",
                     "content": [
                         {
@@ -76,4 +85,4 @@ def lambda_handler(event, context):
                 'error': 'Internal server error',
                 'message': str(e)
             })
-        } 
+        }
