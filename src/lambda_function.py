@@ -32,16 +32,13 @@ def lambda_handler(event, context):
         
         request_body = json.dumps({
             "anthropic_version": "bedrock-2023-05-31",
+            "system": system_prompt,  # ⬅️ Correct placement of the system prompt
             "max_tokens": 200,
             "top_k": 250,
             "stop_sequences": [],
             "temperature": 1,
             "top_p": 0.999,
             "messages": [
-                {
-                    "role": "system",
-                    "content": system_prompt
-                },
                 {
                     "role": "user",
                     "content": [
@@ -53,6 +50,7 @@ def lambda_handler(event, context):
                 }
             ]
         })
+
 
         # Call Bedrock API
         response = bedrock.invoke_model(
