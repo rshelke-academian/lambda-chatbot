@@ -62,6 +62,7 @@ resource "aws_lambda_function" "chatbot_lambda" {
   runtime       = "python3.12"
   timeout       = 30
   memory_size   = 256
+  source_code_hash = filebase64sha256("../deployment.zip")
 
   environment {
     variables = {

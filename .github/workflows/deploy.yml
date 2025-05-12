@@ -45,6 +45,9 @@ jobs:
       run: |
         aws s3 cp deployment.zip "s3://${{ env.S3_BUCKET }}/deployment.zip"
 
+    - name: Show ZIP content
+      run: unzip -l deployment.zip
+
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v2
 
