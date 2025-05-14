@@ -20,24 +20,11 @@ def lambda_handler(event, context):
                 'body': json.dumps({'error': 'No message provided'})
             }
 
-        # Educational system prompt
-        system_prompt = (
-            "You are an educational chatbot designed to help users learn new concepts clearly and interactively. "
-            "Provide step-by-step explanations, simple examples, and ask follow-up questions to engage the learner. "
-            "Avoid jargon and make learning enjoyable."
-        )
-#         system_prompt = (
-#     "You are a compassionate health and wellness chatbot focused on guiding users toward healthier lifestyles. "
-#     "Provide reliable, evidence-based advice on nutrition, fitness, sleep, and stress management. "
-#     "Use an encouraging tone, explain concepts in simple terms, and personalize responses based on user needs. "
-#     "Avoid medical jargon and always remind users to consult a healthcare professional for serious concerns."
-# )
         # Prepare the request for Claude 3
         model_id = 'us.anthropic.claude-3-7-sonnet-20250219-v1:0'
         
         request_body = json.dumps({
             "anthropic_version": "bedrock-2023-05-31",
-            "system": system_prompt,  
             "max_tokens": 200,
             "top_k": 250,
             "stop_sequences": [],
@@ -45,6 +32,8 @@ def lambda_handler(event, context):
             "top_p": 0.999,
             "messages": [
                 {
+                    
+                    
                     "role": "user",
                     "content": [
                         {
@@ -78,6 +67,7 @@ def lambda_handler(event, context):
                 'message': assistant_message
             })
         }
+        
 
     except Exception as e:
         print(f"Error: {str(e)}")
@@ -87,4 +77,4 @@ def lambda_handler(event, context):
                 'error': 'Internal server error',
                 'message': str(e)
             })
-        }
+        } 
